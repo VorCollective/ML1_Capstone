@@ -1,1 +1,5 @@
-# ML1_Capstone
+# ML1_Capstone Ideas
+- 1: Carbon Footprint Estimator for Buildings: Train an AI model to quickly estimate the total carbon footprint (embodied and operational) of building designs during early architectural phases, allowing architects to make data-driven decisions that minimize environmental impact.
+- 2: Optimal Tree Species Selector (Biodiversity Optimizer): Develop a machine learning model (Random Forest) that analyzes multispectral data from satellites (like Sentinel-2) and local environmental conditions (soil moisture, temperature, elevation) to recommend the most resilient native species for a specific planting site.
+- 3: Predicting Drug Resistance: Develop a model that predicts drug resistance in Bacteria using Genomic Data.
+- 4: Supply Chain and Logistics Optimizer: Develop an AI that solves a complex "traveling salesman" type problem for planetary logistics. It would determine the optimal configuration of materials, machines, and repair parts to send from Earth to a colony, maximizing the long-term benefit and self-sufficiency of the settlement.
