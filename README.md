@@ -146,17 +146,17 @@ Train ML Models:
 
 python
 # Data preprocessing
-X = df.drop(['distance_km', 'hours_until_found'], axis=1)
-y_distance = df['distance_km']
-y_time = df['hours_until_found']
+    X = df.drop(['distance_km', 'hours_until_found'], axis=1)
+    y_distance = df['distance_km']
+    y_time = df['hours_until_found']
 
 # Train-test split and model training
-X_train, X_test, y_train, y_test = train_test_split(X, y_distance, test_size=0.2)
+    X_train, X_test, y_train, y_test = train_test_split(X, y_distance, test_size=0.2)
 Use Location Estimator:
 
 python
-estimator = LocationEstimator()
-estimator.set_last_known_location(51.5074, -0.1278)  # London coordinates
+    estimator = LocationEstimator()
+    estimator.set_last_known_location(51.5074, -0.1278)  # London coordinates
 
 # Generate search map
 search_map = estimator.create_search_map(
