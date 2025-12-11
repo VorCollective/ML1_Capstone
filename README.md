@@ -1,52 +1,406 @@
-# ML1_Capstone Ideas
-Project Title: "GaiaSearch: A Multi-Modal ML System for Missing Person Location Prediction"
-The core idea is to create a system that ingests initial case data about a missing person and, over time, integrates new tips and data to predict the most likely areas where the person could be found.
+### ML Capstone Project: Missing Persons Location Estimator
+Project Overview
+This project is a machine learning-based system designed to predict the likely location of missing persons based on various features such as age, vulnerability, location type, time of day, weather conditions, and other relevant factors. The system includes:
 
-1. Problem Definition & Core Value Proposition
-Current missing person searches often rely on manual tip sorting and broad-area canvassing. This system aims to:
+Synthetic dataset generation simulating realistic missing persons cases
 
-Prioritize Tips: Automatically analyze and geolocate tips from social media, hotlines, and public cameras.
+Machine learning models to predict distance traveled by missing individuals
 
-Predict Search Zones: Use the person's profile and historical data to predict high-probability search areas on a map.
+Interactive location estimation with search rings and probability heatmaps
 
-Assist Investigators: Provide a dynamic, data-driven dashboard for search and rescue teams, saving crucial time.
+Visualization tools including interactive maps with search areas
 
-2. System Architecture & Key ML Components
-Your system can be built as a pipeline with the following modules:
+Search plan generation with actionable recommendations
 
-Module 1: Digital Footprint Analyzer & Tip Aggregator
-Goal: Scrape and analyze public digital data related to the case.
+Key Features
+1. Realistic Dataset Generation
+Synthetic data generation based on UK Missing Persons Unit statistics
 
-ML Techniques:
+5000+ samples with 19 features including:
 
-Web Scraping & APIs: (Tools: Scrapy, BeautifulSoup, Tweepy for Twitter/X) to gather data from social media, news sites, and public forums using the missing person's name and aliases.
+Age groups and vulnerability scores
 
-Named Entity Recognition (NER): (e.g., spaCy, BERT) to extract key information from text tips: locations, names, vehicle models, etc.
+Location types (urban, suburban, rural)
 
-Sentiment Analysis & Credibility Scoring: A classifier to prioritize tips. A panicked "I just saw them at X!" would rank higher than a speculative "Maybe they went to Y." This could use a pre-trained model fine-tuned on a dataset of credible/incredible tips.
+Time and weather conditions
 
-Geolocation from Text: Convert extracted location entities ("near the old train station on 5th Ave") into precise latitude and longitude coordinates using Geocoding APIs (Google Geocoding, OpenStreetMap Nomination).
+Search parameters and outcomes
 
-Module 2: Profile-Based Location Predictor
-Goal: Use the missing person's profile to generate initial likely locations.
+Real-world patterns and correlations based on research
 
-Data Input:
+2. Machine Learning Pipeline
+Multiple regression models implemented:
 
-Person's Profile: Home address, workplace/school, frequented locations (from family), medical conditions (e.g., dementia), hobbies, social circle.
+Random Forest Regressor
 
-Historical Data (Optional but powerful): Anonymized data from past missing person cases (age, condition, location, found location).
+Gradient Boosting Regressor
 
-ML Techniques:
+XGBoost
 
-Geospatial Analysis & Clustering: Using the person's known locations as centroids. Apply a Gaussian Mixture Model (GMM) or DBSCAN to create a probability heatmap, giving higher weight to areas closer to home, work, and other key points. For individuals with dementia, research shows they are often found in "attractive nuisances" like bodies of water or dense vegetation within a certain radius.
+LightGBM
 
-Survival Analysis: If historical data is available, you can use survival analysis models (like Cox Proportional Hazards model) to estimate the probability of the person being in different types of terrain (urban, forest, water) based on time missing, age, and condition.
+Lasso/Ridge Regression
 
-Module 3: Multi-Modal Data Fusion & Dynamic Heatmap Generator
-Goal: This is the core. Combining the outputs from Module 1 (live tips) and Module 2 (static profile) into a single, dynamic probability heatmap.
+Automated hyperparameter tuning via GridSearchCV/RandomizedSearchCV
 
-ML Techniques:
+Comprehensive model evaluation metrics (MAE, MSE, R²)
 
-Bayesian Filtering: This is a perfect fit. Treat the search area as a grid. Each cell has a prior probability (from Module 2). As new tips (evidence) come in from Module 1, update the probability of the person being in each cell using Bayes' Theorem.
+3. Location Estimation System
+Search Ring Generation: Concentric rings based on prediction confidence (50%, 80%, 95%)
 
-Model: Implement a simplified Particle Filter. Imagine thousands of "particles" spread across the map, each representing a possible location of the person. The initial distribution is based on the profile. As a credible tip comes in from a specific area, you re-weight the particles, concentrating them around that location. The density of particles then becomes your live heatmap.
+Probability Grids: Gaussian probability distribution around last known location
+
+Likely Location Identification: Common patterns based on vulnerability and age
+
+Interactive Maps: Folium-based visualization with search areas and heatmaps
+
+4. Search Planning Tools
+Priority area calculations (high/medium/low priority)
+
+Terrain-specific search recommendations
+
+Estimated search time and team requirements
+
+Comprehensive search plan reports
+
+Immediate action recommendations based on case details
+
+System Architecture
+Core Components:
+Dataset Generator (MissingPersonsDataset)
+
+Creates synthetic missing persons data
+
+Adds derived features for ML modeling
+
+Saves datasets and statistics
+
+Location Estimator (LocationEstimator)
+
+Predicts likely locations based on ML model outputs
+
+Generates search maps and probability grids
+
+Creates actionable search plans
+
+ML Model Pipeline
+
+Feature preprocessing (scaling, encoding)
+
+Multiple model training and evaluation
+
+Cross-validation and hyperparameter optimization
+
+Dataset Features
+Basic Features:
+case_id: Unique identifier
+
+age_group: Categorical age groups (0-11, 12-17, 18-64, 65+)
+
+vulnerability: Special conditions (dementia, autism, mental illness, etc.)
+
+location_type: Urban, suburban, or rural
+
+time_of_day: Morning, afternoon, evening, night
+
+temperature_c: Weather conditions
+
+has_vehicle: Binary indicator
+
+search_party_size: Number of searchers
+
+Derived Features:
+age_numeric: Numerical age representation
+
+vulnerability_score: Quantified vulnerability
+
+urban_density: Location density score
+
+time_score: Risk factor based on time
+
+risk_factor: Combined risk assessment
+
+is_weekend: Weekend indicator
+
+Target Variables:
+distance_km: Distance traveled (primary prediction target)
+
+hours_until_found: Time until location
+
+is_found: Recovery status
+
+Getting Started
+Prerequisites
+bash
+pip install pandas numpy matplotlib seaborn scikit-learn xgboost lightgbm folium geopy streamlit joblib
+Running the Project
+Generate Dataset:
+
+python
+from dataset_generator import MissingPersonsDataset
+
+dataset_gen = MissingPersonsDataset()
+df = dataset_gen.generate_dataset(5000)
+dataset_gen.save_dataset()
+Train ML Models:
+
+python
+# Data preprocessing
+X = df.drop(['distance_km', 'hours_until_found'], axis=1)
+y_distance = df['distance_km']
+y_time = df['hours_until_found']
+
+# Train-test split and model training
+X_train, X_test, y_train, y_test = train_test_split(X, y_distance, test_size=0.2)
+Use Location Estimator:
+
+python
+estimator = LocationEstimator()
+estimator.set_last_known_location(51.5074, -0.1278)  # London coordinates
+
+# Generate search map
+search_map = estimator.create_search_map(
+    predicted_distance_km=5.0,
+    output_file='search_map.html',
+    vulnerability='dementia'
+)
+Model Performance
+The system achieves:
+
+R² Score: 0.5436 (Distance prediction)
+
+RMSE: 2.609 km
+
+MAE: Competitive error metrics across models
+
+Best performing models:
+
+Gradient Boosting Regressor
+
+Random Forest Regressor
+
+XGBoost
+
+Visualization Examples
+1. Interactive Search Map
+Last known location marker
+
+Confidence-based search rings (50%, 80%, 95%)
+
+Probability heatmaps
+
+Likely location markers with descriptions
+
+2. Search Plan Report
+json
+{
+  "case_summary": {...},
+  "prediction": {
+    "distance_km": 4.2,
+    "confidence": "Based on ML model with R²=0.5436",
+    "error_margin": "±2.61 km (RMSE)"
+  },
+  "search_areas": {...},
+  "likely_locations": [...],
+  "immediate_actions": [...]
+}
+Streamlit Web Application
+The project includes a Streamlit web interface for:
+
+Interactive case input through forms
+
+Real-time predictions and visualizations
+
+Search plan generation with downloadable reports
+
+Case history tracking
+
+To run the web app:
+
+bash
+streamlit run app.py
+Search Plan Components
+Priority Areas:
+High Priority (50% confidence radius)
+
+Core search area with highest probability
+
+Rapid response deployment
+
+Medium Priority (80% confidence radius)
+
+Secondary search area
+
+Grid search patterns
+
+Low Priority (95% confidence radius)
+
+Expanded search area
+
+Aerial support consideration
+
+Terrain-Specific Advice:
+Urban: Focus on buildings, CCTV, public transport
+
+Suburban: Check parks, trails, community centers
+
+Rural: Search trails, water sources, abandoned buildings
+
+Mixed: Coordinate across different terrain types
+
+Customization Options
+1. Dataset Parameters
+python
+# Adjust generation parameters
+dataset_gen.generate_dataset(
+    n_samples=10000,
+    seed=123,
+    age_distribution=[0.2, 0.3, 0.4, 0.1],  # Custom age groups
+    vulnerability_weights={...}  # Custom vulnerability probabilities
+)
+2. Model Configuration
+python
+# Custom hyperparameter grids
+param_grid = {
+    'n_estimators': [100, 200, 300],
+    'max_depth': [10, 20, 30],
+    'learning_rate': [0.01, 0.1, 0.2]
+}
+3. Search Parameters
+python
+# Adjust confidence levels
+rings = estimator.generate_search_rings(
+    predicted_distance_km=5.0,
+    confidence_levels=[0.3, 0.6, 0.9, 0.99]
+)
+Research Basis
+The project is based on:
+
+UK Missing Persons Unit statistics
+
+Academic research on missing persons behavior
+
+Real-world search and rescue methodologies
+
+Geospatial analysis techniques
+
+Key statistical insights:
+
+Children (0-11): Average distance 0.8km
+
+Teens (12-17): Average distance 2.5km
+
+Adults (18-64): Average distance 5.2km
+
+Seniors (65+): Average distance 1.6km
+
+Dementia patients: 95% found within 24h, average distance 1.6km
+
+Use Cases
+1. Law Enforcement
+Rapid deployment planning
+
+Resource allocation optimization
+
+Search area prioritization
+
+2. Search and Rescue Teams
+Terrain-specific search strategies
+
+Time and team requirement estimation
+
+Evidence-based decision making
+
+3. Community Organizations
+Vulnerability-aware search planning
+
+Public awareness campaigns
+
+Preventive measures development
+
+4. Academic Research
+Missing persons behavior analysis
+
+Predictive model development
+
+Policy and protocol evaluation
+
+Future Enhancements
+Planned Features:
+Real-time Data Integration
+
+Live weather data
+
+Traffic patterns
+
+Recent incident reports
+
+Advanced ML Features
+
+Deep learning models
+
+Ensemble methods
+
+Time-series analysis
+
+Mobile Application
+
+Field data collection
+
+Offline functionality
+
+GPS integration
+
+Additional Data Sources
+
+Social media data
+
+CCTV network analysis
+
+Transportation records
+
+Technical Improvements:
+Model Explainability: SHAP values, feature importance
+
+Uncertainty Quantification: Bayesian methods
+
+Automated Reporting: PDF generation, email integration
+
+API Development: RESTful endpoints for integration
+
+Contributing
+We welcome contributions in:
+
+Model Development: New algorithms and improvements
+
+Data Sources: Additional datasets and features
+
+Visualization: Enhanced mapping and UI components
+
+Documentation: Tutorials and use case examples
+
+Development Setup:
+bash
+# Clone repository
+git clone https://github.com/yourusername/missing-persons-ml.git
+cd missing-persons-ml
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run tests
+pytest tests/
+
+
+Acknowledgments
+UK Missing Persons Unit for statistical data
+
+Open-source community for ML libraries and tools
+
+Search and rescue organizations for domain expertise
+
+Academic researchers in geospatial analysis and predictive modeling
