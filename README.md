@@ -132,16 +132,16 @@ is_found: Recovery status
 Getting Started
 Prerequisites
 bash
-pip install pandas numpy matplotlib seaborn scikit-learn xgboost lightgbm folium geopy streamlit joblib
+    pip install pandas numpy matplotlib seaborn scikit-learn xgboost lightgbm folium geopy streamlit joblib
 Running the Project
 Generate Dataset:
 
 python
 from dataset_generator import MissingPersonsDataset
 
-dataset_gen = MissingPersonsDataset()
-df = dataset_gen.generate_dataset(5000)
-dataset_gen.save_dataset()
+    dataset_gen = MissingPersonsDataset()
+    df = dataset_gen.generate_dataset(5000)
+    dataset_gen.save_dataset()
 Train ML Models:
 
 python
@@ -159,7 +159,7 @@ python
     estimator.set_last_known_location(51.5074, -0.1278)  # London coordinates
 
 # Generate search map
-search_map = estimator.create_search_map(
+    search_map = estimator.create_search_map(
     predicted_distance_km=5.0,
     output_file='search_map.html',
     vulnerability='dementia'
@@ -193,10 +193,10 @@ Likely location markers with descriptions
 
 2. Search Plan Report
 json
-{
-  "case_summary": {...},
-  "prediction": {
-    "distance_km": 4.2,
+   {
+   "case_summary": {...},
+   "prediction": {
+   "distance_km": 4.2,
     "confidence": "Based on ML model with R²=0.5436",
     "error_margin": "±2.61 km (RMSE)"
   },
@@ -204,16 +204,7 @@ json
   "likely_locations": [...],
   "immediate_actions": [...]
 }
-Streamlit Web Application
-The project includes a Streamlit web interface for:
 
-Interactive case input through forms
-
-Real-time predictions and visualizations
-
-Search plan generation with downloadable reports
-
-Case history tracking
 
 To run the web app:
 
@@ -252,7 +243,7 @@ Customization Options
 1. Dataset Parameters
 python
 # Adjust generation parameters
-dataset_gen.generate_dataset(
+    dataset_gen.generate_dataset(
     n_samples=10000,
     seed=123,
     age_distribution=[0.2, 0.3, 0.4, 0.1],  # Custom age groups
@@ -261,7 +252,7 @@ dataset_gen.generate_dataset(
 2. Model Configuration
 python
 # Custom hyperparameter grids
-param_grid = {
+    param_grid = {
     'n_estimators': [100, 200, 300],
     'max_depth': [10, 20, 30],
     'learning_rate': [0.01, 0.1, 0.2]
@@ -269,7 +260,7 @@ param_grid = {
 3. Search Parameters
 python
 # Adjust confidence levels
-rings = estimator.generate_search_rings(
+    rings = estimator.generate_search_rings(
     predicted_distance_km=5.0,
     confidence_levels=[0.3, 0.6, 0.9, 0.99]
 )
@@ -382,18 +373,18 @@ Documentation: Tutorials and use case examples
 Development Setup:
 bash
 # Clone repository
-git clone https://github.com/yourusername/missing-persons-ml.git
-cd missing-persons-ml
+    git clone https://github.com/yourusername/missing-persons-ml.git
+    cd missing-persons-ml
 
 # Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
-pip install -r requirements.txt
+    pip install -r requirements.txt
 
 # Run tests
-pytest tests/
+    pytest tests/
 
 
 Acknowledgments
