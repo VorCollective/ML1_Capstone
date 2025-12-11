@@ -177,9 +177,6 @@ The project includes a Streamlit web interface for:
 - **Case history tracking**
 
 To run the web app locally:
-```bash
-streamlit run app.py
-```
 
 **Access the deployed application at:** [https://search-helper.lovable.app/](https://search-helper.lovable.app/)
 
@@ -335,9 +332,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 For questions, suggestions, or collaboration opportunities:
 - **Web Application**: [https://search-helper.lovable.app/](https://search-helper.lovable.app/)
-- **Email**: project@example.com
-- **GitHub Issues**: [Project Issues Page]
-- **Documentation**: [Project Wiki]
+- **Email**: cyandisc@gmail.com
+- **Documentation**: [https://lebensons.hashnode.dev/search-helper]
 
 ##  Acknowledgments
 
